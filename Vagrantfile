@@ -25,10 +25,12 @@ Vagrant.configure(2) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
+  #
   config.vm.network "forwarded_port", guest: 3000, host: 3000
   config.vm.network "forwarded_port", guest: 5000, host: 5000
   config.vm.network "forwarded_port", guest: 8000, host: 8000
   config.vm.network "forwarded_port", guest: 8888, host: 8888
+  config.vm.network "forwarded_port", guest: 50700, host: 50700 
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -88,7 +90,7 @@ Vagrant.configure(2) do |config|
     apt-get update
     apt-get dist-upgrade -y
 
-    apt-get install -y -q git wget curl pandoc build-essential vim-gnome python python-dev python-setuptools
+    apt-get install -y -q git wget curl build-essential python python-dev python-setuptools
     apt-get install -y -q gfortran libopenblas-dev liblapack-dev
     apt-get install -y -q libncurses5-dev pkg-config libfreetype6-dev libpng12-dev
 
@@ -104,15 +106,35 @@ Vagrant.configure(2) do |config|
     update-java-alternatives -s java-8-oracle
 
     apt-get autoremove -q -y
+
+	ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa
+	cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+	mkdir -p /var/run/sshd
+	echo "Host localhost\n    UserKnownHostsFile=/dev/null\n    StrictHostKeyChecking=no" >> /root/.ssh/config
+
+   	wget http://ftp.heanet.ie/mirrors/www.apache.org/dist/hadoop/common/stable/hadoop-2.7.2.tar.gz
+	tar xzf hadoop-2.7.2.tar.gz
+	mv hadoop-2.7.2 /usr/local/hadoop
+    
+    echo "\n\n export JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre/" >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh
+ 
+
   SHELL
 
   # make user-mode configuration changes
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
+
+   echo "export HADOOP_HOME=/usr/local/hadoop" >> ~/.bashrc
+   echo 'export PATH=$PATH:/usr/local/hadoop/bin' >> ~/.bashrc
+   echo 'export PATH=$PATH:/usr/local/hadoop/sbin' >> ~/.bashrc
+
+
     mkdir -p ~/.virtualenvs
     echo "\n\n export WORKON_HOME=/home/vagrant/.virtualenvs" >> ~/.bashrc
     echo "\n\n source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
-    echo "\n\n alias ipython='ipython notebook --no-browser --ip=0.0.0.0 --port=8888'" >> ~/.bashrc
+    echo "\n\n alias ipython='jupyter notebook --no-browser --ip=0.0.0.0 --port=8888'" >> ~/.bashrc
 
     echo "\n\n export JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre/" >> ~/.bashrc
   SHELL
+
 end
