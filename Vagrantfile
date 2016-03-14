@@ -101,7 +101,7 @@ Vagrant.configure(2) do |config|
     add-apt-repository ppa:webupd8team/java
     apt-get -y -q update
     echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-    apt-get -y -q install oracle-java8-installer
+    apt-get -y -q install oracle-java8-installer > /dev/null 2>&1
     update-java-alternatives -s java-8-oracle
 
     apt-get autoremove -q -y
@@ -131,7 +131,7 @@ Vagrant.configure(2) do |config|
     mkdir -p /user/hive
     chmod -R 777 /user/hive 
 
-    /usr/local/hadoop fs mkdir /user/hive/warehouse
+    /usr/local/hadoop/bin/hadoop fs mkdir /user/hive/warehouse
     
 
     SHELL
@@ -144,7 +144,7 @@ Vagrant.configure(2) do |config|
     echo 'export PATH=$PATH:/usr/local/hadoop/bin' >> ~/.bashrc
     echo 'export PATH=$PATH:/usr/local/hadoop/sbin' >> ~/.bashrc
 
-    $HIVE_HOME/bin/schematool -initSchema -dbType derby
+    $HIVE_HOME/bin/schematool -initSchema -dbType derby > /home/vagarnt/derby.log
 
     mkdir -p ~/.virtualenvs
     echo "\n\n export WORKON_HOME=/home/vagrant/.virtualenvs" >> ~/.bashrc
