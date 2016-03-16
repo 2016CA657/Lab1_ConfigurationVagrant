@@ -106,7 +106,7 @@ Vagrant.configure(2) do |config|
 
     apt-get autoremove -q -y
 
-    ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa
+    ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa > /dev/null 2>&1
     cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
     mkdir -p /var/run/sshd
     echo "Host localhost\n    UserKnownHostsFile=/dev/null\n    StrictHostKeyChecking=no" >> /root/.ssh/config
@@ -142,28 +142,16 @@ Vagrant.configure(2) do |config|
     tar zxf apache-storm-0.10.0.tar.gz
     mv apache-storm-0.10.0 /usr/local/storm
     chmod -R 777 /usr/local/storm
-
-    echo "Sparking up"
-    wget --quiet http://ftp.heanet.ie/mirrors/www.apache.org/dist/spark/spark-1.6.1/spark-1.6.1.tgz
-    tar zxf spark-1.6.1.tgz
-    cd spark-1.6.1
-    build/mvn -Pyarn -Phadoop-2.7 -Dhadoop.version=2.7.0 -DskipTests clean package > sparkbuild.log 2> &1
-    cd ..
-    mv spark-1.6.1 /usr/local/spark
-    chmod -R 777 /usr/local/spark
     
     SHELL
 
     # make user-mode configuration changes
     config.vm.provision "shell", privileged: false, inline: <<-SHELL
-
+    cd /home/vagrant
     echo 'export HIVE_HOME=/usr/local/hive' >> ~/.bashrc
     echo "export HADOOP_HOME=/usr/local/hadoop" >> ~/.bashrc
     echo 'export PATH=$PATH:/usr/local/hadoop/bin' >> ~/.bashrc
     echo 'export PATH=$PATH:/usr/local/hadoop/sbin' >> ~/.bashrc
-
-    # keep a log of what happened in the vagrant
-    $HIVE_HOME/bin/schematool -initSchema -dbType derby
 
     mkdir -p ~/.virtualenvs
     echo "\n\n export WORKON_HOME=/home/vagrant/.virtualenvs" >> ~/.bashrc
@@ -172,9 +160,18 @@ Vagrant.configure(2) do |config|
 
     echo "\n\n export JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre/" >> ~/.bashrc
 
-    
+    source ~/.bashrc
 
-    
+    # keep a log of what happened in the vagrant
+    $HIVE_HOME/bin/schematool -initSchema -dbType derby
 
+    echo "Sparking up. This takes a very long time..."
+    wget --quiet http://ftp.heanet.ie/mirrors/www.apache.org/dist/spark/spark-1.6.1/spark-1.6.1.tgz 
+    tar zxf spark-1.6.1.tgz
+    cd spark-1.6.1
+    build/mvn -Pyarn -Phadoop-2.6 -Dhadoop.version=2.7.0 -DskipTests clean package
+    cd ..
+    echo "Told you"
+    
     SHELL
 end
