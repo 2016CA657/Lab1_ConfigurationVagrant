@@ -97,7 +97,7 @@ Vagrant.configure(2) do |config|
     pip install -U pip setuptools cython
     pip install -U virtualenv virtualenvwrapper
 
-    apt-get -y -q install software-properties-common htop
+    apt-get -y -q install software-properties-common htop maven
     add-apt-repository ppa:webupd8team/java
     apt-get -y -q update
     echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
@@ -111,29 +111,47 @@ Vagrant.configure(2) do |config|
     mkdir -p /var/run/sshd
     echo "Host localhost\n    UserKnownHostsFile=/dev/null\n    StrictHostKeyChecking=no" >> /root/.ssh/config
 
+    echo "hadoop downloading and installing"
     wget --quiet http://ftp.heanet.ie/mirrors/www.apache.org/dist/hadoop/common/stable/hadoop-2.7.2.tar.gz
     tar xzf hadoop-2.7.2.tar.gz
     mv hadoop-2.7.2 /usr/local/hadoop
     chmod -R 777 /usr/local/hadoop
 
     echo "\n\n export JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre/" >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh
-
+    
+    echo "hive downloading and installing"
     wget --quiet http://ftp.heanet.ie/mirrors/www.apache.org/dist/hive/hive-2.0.0/apache-hive-2.0.0-bin.tar.gz
     tar xzf apache-hive-2.0.0-bin.tar.gz
     mv apache-hive-2.0.0-bin /usr/local/hive
     chmod -R 777 /usr/local/hive
-
+    
+    echo "pig downloading and installing"
     wget --quiet http://ftp.heanet.ie/mirrors/www.apache.org/dist/pig/latest/pig-0.15.0.tar.gz
     tar xzf pig-0.15.0.tar.gz
     mv pig-0.15.0 /usr/local/pig
     chmod -R 777 /usr/local/pig
 
     mkdir -p /user/hive
+
+    # set the hive warehouse up
+    /usr/local/hadoop/bin/hadoop fs -mkdir /user/hive/warehouse
     chmod -R 777 /user/hive 
 
-    /usr/local/hadoop/bin/hadoop fs mkdir /user/hive/warehouse
-    
+    echo "brewing up a storm"
+    wget --quiet http://mirrors.whoishostingthis.com/apache/storm/apache-storm-0.10.0/apache-storm-0.10.0.tar.gz
+    tar zxf apache-storm-0.10.0.tar.gz
+    mv apache-storm-0.10.0 /usr/local/storm
+    chmod -R 777 /usr/local/storm
 
+    echo "Sparking up"
+    wget --quiet http://ftp.heanet.ie/mirrors/www.apache.org/dist/spark/spark-1.6.1/spark-1.6.1.tgz
+    tar zxf spark-1.6.1.tgz
+    cd spark-1.6.1
+    build/mvn -Pyarn -Phadoop-2.7 -Dhadoop.version=2.7.0 -DskipTests clean package > sparkbuild.log 2> &1
+    cd ..
+    mv spark-1.6.1 /usr/local/spark
+    chmod -R 777 /usr/local/spark
+    
     SHELL
 
     # make user-mode configuration changes
@@ -144,7 +162,8 @@ Vagrant.configure(2) do |config|
     echo 'export PATH=$PATH:/usr/local/hadoop/bin' >> ~/.bashrc
     echo 'export PATH=$PATH:/usr/local/hadoop/sbin' >> ~/.bashrc
 
-    $HIVE_HOME/bin/schematool -initSchema -dbType derby > /home/vagarnt/derby.log
+    # keep a log of what happened in the vagrant
+    $HIVE_HOME/bin/schematool -initSchema -dbType derby
 
     mkdir -p ~/.virtualenvs
     echo "\n\n export WORKON_HOME=/home/vagrant/.virtualenvs" >> ~/.bashrc
@@ -152,5 +171,10 @@ Vagrant.configure(2) do |config|
     echo "\n\n alias ipython='jupyter notebook --no-browser --ip=0.0.0.0 --port=8888'" >> ~/.bashrc
 
     echo "\n\n export JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre/" >> ~/.bashrc
+
+    
+
+    
+
     SHELL
 end
