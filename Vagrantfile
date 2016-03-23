@@ -163,7 +163,7 @@ Vagrant.configure(2) do |config|
     source ~/.bashrc
 
     # keep a log of what happened in the vagrant
-    $HIVE_HOME/bin/schematool -initSchema -dbType derby
+    /usr/local/hive/bin/schematool -initSchema -dbType derby
 
     echo "Sparking up. This takes a very long time..."
     wget --quiet http://ftp.heanet.ie/mirrors/www.apache.org/dist/spark/spark-1.6.1/spark-1.6.1.tgz 
