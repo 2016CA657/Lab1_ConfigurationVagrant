@@ -5,7 +5,7 @@ This will provide a convenient baseline for the practicals for CA675
 ## Step by Step
 
 1. Install VirtualBox or VMware Player
-    * VirtualBox users must install the Oracle Extension Pack  http://download.virtualbox.org/virtualbox/{VB_VERSION}/Oracle_VM_VirtualBox_Extension_Pack-{VB_VERSION}.vbox-extpack
+    * https://www.virtualbox.org/wiki/Downloads
 2. Install Vagrant: <https://www.vagrantup.com/>
     * On Windows, it's also useful to install
     * Putty <http://www.putty.org/> to SSH into the local box
