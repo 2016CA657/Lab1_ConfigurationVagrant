@@ -4,7 +4,7 @@ This will provide a convenient baseline for the practicals for CA675
 
 ## Step by Step
 
-1. Install VirtualBox or VMware Player
+1. Install VirtualBox ( or VMware Player as an alternative)
     * https://www.virtualbox.org/wiki/Downloads
 2. Install Vagrant: <https://www.vagrantup.com/>
     * On Windows, these resources are useful:
@@ -22,3 +22,9 @@ This will provide a convenient baseline for the practicals for CA675
 6. You can then use putty to ssh into `localhost` port `2222`
    (username/password is `vagrant`)
 7. Alternatively, use `vagrant ssh` for normal access
+
+As an alternative to Vagrant, you can install the Cloudera QuickStart VM which runs Cloudera Hadoop Distribution
+   * Video tutorial: https://www.youtube.com/watch?v=BeCtjd86YXo
+   * Installation instruction with VirtualBox: http://www.cse.scu.edu/~mwang2/projects/CDH_installConfig1_13m.pdf 
+
+The QuickStart VM is fully functional and you can test many Hadoop services, even though it is running as a single-node cluster.
