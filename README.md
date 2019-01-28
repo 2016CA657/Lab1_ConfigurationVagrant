@@ -6,9 +6,9 @@ This will provide a convenient baseline for the practicals for CA675
 
 1. Install VirtualBox
 2. Install Vagrant
-3. CD into the directory where you want to put your Vagrantfile
+3. CD into the directory where you want to put your VagrantFile
+  * Note for DCU lab machine users - When creating a VM, you should create a folder in d:\virtual (or d:\temp) and store the VM there (or on a personal USB hard drive)
 4. `vagrant init ubuntu/trusty64` will create a vagrant box (and your vagrant file) and set up your virtual machine
-   * Note for DCU lab machine users - When creating a VM, you should create a folder in d:\virtual (or d:\temp) and store the VM there (or on a personal USB hard drive)
 5. `vagrant up` will start the process of downloading and configuring the VM
 6. Use `vagrant ssh` to ssh into the running machine
 7. Alternatively, you can then use putty to ssh into `localhost` port `2222` (username/password is `vagrant`)
