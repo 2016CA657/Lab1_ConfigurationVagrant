@@ -4,7 +4,7 @@ This will provide a convenient baseline for the practicals for CA675
 
 ## Step by Step
 
-1. Install [VirtualBox](https://www.vagrantup.com/)
+1. Install [VirtualBox](https://www.virtualbox.org/)
 2. Install [Vagrant](https://www.vagrantup.com/)
 3. CD into the directory where you want to put your VagrantFile
     * Note for DCU lab machine users - When creating a VM, you should create a folder in d:\virtual (or d:\temp) and store the VM there (or on a personal USB hard drive)
