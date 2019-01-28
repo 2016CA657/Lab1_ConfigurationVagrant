@@ -1,4 +1,4 @@
-#CA675 Vagrant File
+# CA675 Vagrant File
 
 This will provide a convenient baseline for the practicals for CA675
 
