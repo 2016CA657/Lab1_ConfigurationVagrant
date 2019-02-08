@@ -12,7 +12,7 @@ This will provide a convenient baseline for the practicals for CA675
     * Note you can only have one VagrantFile in any given directory
 5. `vagrant up` will start the process of downloading and configuring the VM
 6. Use `vagrant ssh` to ssh into the running machine
-7. Alternatively, you can then use putty to ssh into `localhost` port `2222` (username/password is `vagrant`)
+    * Alternatively, you can use putty to ssh into `localhost` port `2222` (username/password is `vagrant`)
 8. You can then open the `VagrantFile` in a text editor and edit as necessary
     * You might wish to change the number of VCPUs, Memory Allocation
     * You might wish to add or remove shared directories
