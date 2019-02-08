@@ -1,6 +1,8 @@
 # CA675 Vagrant File
 
-This will provide a convenient baseline for the practicals for CA675
+This will provide a convenient baseline for the practicals for CA675.
+
+Vagrant file above ^^^ is a working version up to end of lab 2.
 
 ## Step by Step
 
