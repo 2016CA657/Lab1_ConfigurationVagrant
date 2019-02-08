@@ -1,4 +1,3 @@
-
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -13,12 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-
-
-  config.vm.box = "hashicorp/precise64"
-
-  config.ssh.forward_x11 = true
-  config.ssh.forward_agent = true
+  config.vm.box = "ubuntu/trusty64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -70,36 +64,23 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
 
+
    config.vm.provision "shell", inline: <<-SHELL
-   
+     
+     # Set up basics
       apt-get update
       apt-get install -y apache2
+      
+      apt-get install -y -q git wget curl build-essential python python-dev python-setuptools python-pip
+      pip install --upgrade pip
+      pip install --upgrade virtualenv
 
-      # Install Java 8
-      apt-get install -y python-software-properties
-      add-apt-repository ppa:webupd8team/java
-      apt-get -y -q update
-      echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-      apt-get -y install oracle-java8-installer
-      update-java-alternatives -s java-8-oracle
+      ### Install mrjob (mapreduce python library)
 
-      # Find java home location ( should be /usr/lib/jvm/java-8-oracle/jre/ )
-      readlink -f /usr/bin/java | sed "s:bin/java::"
-
-      # Set JAVA_HOME Variable
-      echo '\n\n JAVA_HOME="/usr/lib/jvm/java-8-oracle/jre/"' >> /etc/environment
-      source /etc/environment
-
-      # Install Hadoop
-      wget http://ftp.heanet.ie/mirrors/www.apache.org/dist/hadoop/common/stable/hadoop-2.9.0.tar.gz
-      tar xzf hadoop-2.9.0.tar.gz
-      mv hadoop-2.9.0 /usr/local/hadoop
-      chmod -R 777 /usr/local/hadoop
-
-      # Set JAVA_HOME Variable in Hadoop
-      echo '\n\n export JAVA_HOME="/usr/lib/jvm/java-8-oracle/jre/"' >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh
+      pip install markdown
+      pip install testresources
+      pip install mrjob --ignore-installed six
 
    SHELL
-
 
 end
