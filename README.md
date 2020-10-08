@@ -32,3 +32,18 @@ As an alternative to Vagrant, you can install the Cloudera QuickStart VM which r
 <!---
 The QuickStart VM is fully functional and you can test many Hadoop services, even though it is running as a single-node cluster.
 --->
+
+
+## Amazon AWS
+
+Amazon AWS is a cloud stack that provides compute, storage, database, and other functionality from a centralised console.
+The Web Services provided are based on a pay-per-use model, with different criteria depending on the service. 
+
+AWS has a free trial tier, please sign up for it:
+<http://aws.amazon.com/>
+
+## Send your details
+
+Please email your gitlab username and amazon AWS username to [alessandra.mileo@dcu.ie](mailto:alessandra.mileo@dcu.ie)
+
+
